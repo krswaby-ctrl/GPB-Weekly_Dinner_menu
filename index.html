@@ -4,13 +4,20 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>GPB Weekly Dinner Menu</title>
+  
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+
   <style>
     :root { color-scheme: light dark; }
     html, body {
       margin: 0;
       padding: 0;
       height: 100%;
-      background: #000; /* clean letterboxing on non-matching aspect ratios */
+      background: #000;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
     }
     .wrap {
@@ -27,9 +34,8 @@
       width: auto;
       height: auto;
       display: block;
-      object-fit: contain; /* show entire menu without cropping */
+      object-fit: contain;
     }
-    /* small verification badge (remove if you want a perfectly clean screen) */
     .badge {
       position: fixed;
       bottom: 10px;
@@ -51,7 +57,7 @@
   <div class="badge" id="badge" aria-hidden="true"></div>
 
   <script>
-    // --- ISO week helper (weeks start on Monday) ---
+    // --- Original Logic ---
     function getISOWeekNumber(date) {
       const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
       const dayNum = d.getUTCDay() || 7;
@@ -60,7 +66,6 @@
       return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
     }
 
-    // Map week index (1..5) to your filenames
     const imageForWeek = {
       1: "GPB Week 1 Dinner Menu 9.25.png",
       2: "GPB Week 2 Dinner Menu 9.25.png",
@@ -69,21 +74,16 @@
       5: "GPB Week 5 Dinner Menu 9.25.png",
     };
 
-    // Compute today's image and set it
     function setMenuImageForToday() {
-      const now = new Date(); // local time on the device
+      const now = new Date();
       const isoWeek = getISOWeekNumber(now);
-      const baseWeekIndex = ((isoWeek - 1) % 5) + 1; // 1..5
+      const baseWeekIndex = ((isoWeek - 1) % 5) + 1;
+      const alignOffset = (2 - baseWeekIndex + 5) % 5;
+      const alignedWeekIndex = ((baseWeekIndex - 1 + alignOffset) % 5) + 1;
 
-      // Align so "today shows Week 2"; ISO week increments every Monday
-      const alignOffset = (2 - baseWeekIndex + 5) % 5; // 0..4
-      const alignedWeekIndex = ((baseWeekIndex - 1 + alignOffset) % 5) + 1; // 1..5
-
-      // Apply image
       const imgEl = document.getElementById("menuImage");
       imgEl.src = imageForWeek[alignedWeekIndex];
 
-      // Optional verification badge
       const badge = document.getElementById("badge");
       if (badge) {
         const weekdays = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
@@ -91,22 +91,26 @@
       }
     }
 
-    // Set now
     setMenuImageForToday();
 
-    // Preload for smooth display if someone refreshes near a rollover
-    Object.values(imageForWeek).forEach(src => { const i = new Image(); i.src = src; });
+    // --- Service Worker Registration ---
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => console.log('SW Registered'))
+          .catch(err => console.log('SW Registration Failed', err));
+      });
+    }
 
-    // --- Auto-rollover: update shortly after local midnight every day ---
+    // --- Midnight Update Logic ---
     function scheduleMidnightUpdate() {
       const now = new Date();
       const next = new Date(now);
-      // Schedule 5 seconds after midnight to avoid any clock boundary edge cases
       next.setHours(24, 0, 5, 0);
       const msUntilNext = next - now;
       setTimeout(() => {
-        setMenuImageForToday();   // pick today's image (e.g., Monday -> next week)
-        scheduleMidnightUpdate(); // schedule again for the following midnight
+        setMenuImageForToday();
+        scheduleMidnightUpdate();
       }, msUntilNext);
     }
     scheduleMidnightUpdate();
