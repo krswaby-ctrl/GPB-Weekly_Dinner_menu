@@ -2,40 +2,33 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, viewport-fit=cover"
-  />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>GPB Weekly Dinner Menu</title>
+
   <style>
-    :root {
-      color-scheme: light dark;
-      --bg: #111;
-      --fg: #f2f2f2;
-    }
+    :root { color-scheme: light dark; }
     html, body {
-      height: 100%;
       margin: 0;
+      padding: 0;
+      height: 100%;
       background: #000;
-      display: grid;
-      place-items: center;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
     }
     .wrap {
-      width: 100vw;
-      height: 100vh;
+      width: 100dvw;
+      height: 100dvh;
       display: grid;
       place-items: center;
       overflow: hidden;
+      background: #000;
     }
-    img {
-      max-width: 100%;
-      100%;
-      height: auto;
+    img#menuImage {
+      max-width: 100dvw;
+      max-height: 100dvh;
       width: auto;
+      height: auto;
       display: block;
       object-fit: contain;
-      image-rendering: auto;
     }
     .badge {
       position: fixed;
@@ -63,12 +56,11 @@
       const dayNum = d.getUTCDay() || 7;
       d.setUTCDate(d.getUTCDate() + 4 - dayNum);
       const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-      const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
-      return weekNo;
+      return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
     }
 
     const imageForWeek = {
-     1: "GPB Week 1 Dinner Menu 9.25.png",
+      1: "GPB Week 1 Dinner Menu 9.25.png",
       2: "GPB Week 2 Dinner Menu 9.25.png",
       3: "GPB Week 3 Dinner Menu 9.25.png",
       4: "GPB Week 4 Dinner Menu 9.25.png",
@@ -79,6 +71,7 @@
     const isoWeek = getISOWeekNumber(now);
     const baseWeekIndex = ((isoWeek - 1) % 5) + 1;
 
+    // Align so today shows Week 2; tomorrow (Monday) shows Week 3
     const alignOffset = (2 - baseWeekIndex + 5) % 5;
     const alignedWeekIndex = ((baseWeekIndex - 1 + alignOffset) % 5) + 1;
 
@@ -89,10 +82,8 @@
     const weekdays = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
     badge.textContent = `Showing Week ${alignedWeekIndex} • ${weekdays[now.getDay()]}, ${now.toDateString()}`;
 
-    Object.values(imageForWeek).forEach(src => {
-      const i = new Image();
-      i.src = src;
-    });
+    // Preload for smooth transitions
+    Object.values(imageForWeek).forEach(src => { const i = new Image(); i.src = src; });
   </script>
 </body>
 </html>
