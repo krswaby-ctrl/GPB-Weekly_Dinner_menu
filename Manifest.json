@@ -1,15 +1,14 @@
 {
   "name": "GPB Weekly Dinner Menu",
   "short_name": "Dinner Menu",
-  "start_url": ""/GPB-Weekly_Dinner_menu/",
+  "start_url": "/GPB-Weekly_Dinner_menu/index.html",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#000000",
-  "description": "5-week rotating dinner menu for GPB.",
   "icons": [
     {
-      "src": "icon-192.png",
-      "sizes": "192x192",
+      "src": "icon-128.png",
+      "sizes": "128x128",
       "type": "image/png"
     },
     {
