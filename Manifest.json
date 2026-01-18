@@ -1,7 +1,7 @@
 {
   "name": "GPB Weekly Dinner Menu",
   "short_name": "Dinner Menu",
-  "start_url": ".",
+  "start_url": ""/GPB-Weekly_Dinner_menu/",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#000000",
