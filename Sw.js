@@ -1,8 +1,10 @@
-const CACHE_NAME = 'gpb-menu-v1';
+const CACHE_NAME = 'gpb-menu-v4';
 const ASSETS = [
   '/GPB-Weekly_Dinner_menu/',
   '/GPB-Weekly_Dinner_menu/index.html',
   '/GPB-Weekly_Dinner_menu/manifest.json',
+  '/GPB-Weekly_Dinner_menu/icon-128.png',
+  '/GPB-Weekly_Dinner_menu/icon-512.png',
   '/GPB-Weekly_Dinner_menu/GPB Week 1 Dinner Menu 9.25.png',
   '/GPB-Weekly_Dinner_menu/GPB Week 2 Dinner Menu 9.25.png',
   '/GPB-Weekly_Dinner_menu/GPB Week 3 Dinner Menu 9.25.png',
