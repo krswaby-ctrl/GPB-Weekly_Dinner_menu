@@ -5,11 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>GPB Weekly Dinner Menu</title>
   
-  <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#000000" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <link rel="apple-touch-icon" href="icon-192.png" />
+  <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="icon-192.png">
 
   <style>
     :root { color-scheme: light dark; }
@@ -57,7 +56,6 @@
   <div class="badge" id="badge" aria-hidden="true"></div>
 
   <script>
-    // --- Original Logic ---
     function getISOWeekNumber(date) {
       const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
       const dayNum = d.getUTCDay() || 7;
@@ -93,16 +91,15 @@
 
     setMenuImageForToday();
 
-    // --- Service Worker Registration ---
+    // REGISTER SERVICE WORKER
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
-          .then(reg => console.log('SW Registered'))
-          .catch(err => console.log('SW Registration Failed', err));
+        navigator.serviceWorker.register('/GPB-Weekly_Dinner_menu/sw.js')
+          .then(reg => console.log('Service Worker registered'))
+          .catch(err => console.log('Service Worker failed', err));
       });
     }
 
-    // --- Midnight Update Logic ---
     function scheduleMidnightUpdate() {
       const now = new Date();
       const next = new Date(now);
