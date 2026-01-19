@@ -1,27 +1,25 @@
-const CACHE_NAME = 'gpb-menu-v4';
+const CACHE_NAME = 'gpb-menu-v7'; // Changed version to force update
 const ASSETS = [
-  '/GPB-Weekly_Dinner_menu/',
-  '/GPB-Weekly_Dinner_menu/index.html',
-  '/GPB-Weekly_Dinner_menu/manifest.json',
-  '/GPB-Weekly_Dinner_menu/icon-128.png',
-  '/GPB-Weekly_Dinner_menu/icon-512.png',
-  '/GPB-Weekly_Dinner_menu/GPB Week 1 Dinner Menu 9.25.png',
-  '/GPB-Weekly_Dinner_menu/GPB Week 2 Dinner Menu 9.25.png',
-  '/GPB-Weekly_Dinner_menu/GPB Week 3 Dinner Menu 9.25.png',
-  '/GPB-Weekly_Dinner_menu/GPB Week 4 Dinner Menu 9.25.png',
-  '/GPB-Weekly_Dinner_menu/GPB Week 5 Dinner Menu 9.25.png'
+  './',
+  './index.html',
+  './manifest.json',
+  './icon-128.png',
+  './icon-512.png'
 ];
 
+// On install, cache the app shell
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
   );
+  self.skipWaiting(); // Force the new service worker to take over immediately
 });
 
+// Network-first strategy: Try the internet first for the newest menu
 self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
+    fetch(event.request).catch(() => {
+      return caches.match(event.request);
     })
   );
 });
