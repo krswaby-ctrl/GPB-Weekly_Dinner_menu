@@ -56,6 +56,7 @@
   <div class="badge" id="badge" aria-hidden="true"></div>
 
   <script>
+    // --- ISO week helper ---
     function getISOWeekNumber(date) {
       const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
       const dayNum = d.getUTCDay() || 7;
@@ -64,6 +65,7 @@
       return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
     }
 
+    // Map week index (1..5) to filenames
     const imageForWeek = {
       1: "GPB Week 1 Dinner Menu 9.25.png",
       2: "GPB Week 2 Dinner Menu 9.25.png",
@@ -75,8 +77,14 @@
     function setMenuImageForToday() {
       const now = new Date();
       const isoWeek = getISOWeekNumber(now);
+      
+      // Calculate 1-5 index based on current ISO week
       const baseWeekIndex = ((isoWeek - 1) % 5) + 1;
-      const alignOffset = (2 - baseWeekIndex + 5) % 5;
+
+      // ALIGNMENT FIX: 
+      // Changed from '2' to '3' to correctly show Week 3 on Jan 19.
+      // This ensures next Monday (Jan 26) will display Week 4.
+      const alignOffset = (3 - baseWeekIndex + 5) % 5;
       const alignedWeekIndex = ((baseWeekIndex - 1 + alignOffset) % 5) + 1;
 
       const imgEl = document.getElementById("menuImage");
@@ -89,17 +97,20 @@
       }
     }
 
+    // Set initial image
     setMenuImageForToday();
 
     // REGISTER SERVICE WORKER
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/GPB-Weekly_Dinner_menu/sw.js')
+        // Using a relative path for sw.js to improve GitHub Pages compatibility
+        navigator.serviceWorker.register('sw.js')
           .then(reg => console.log('Service Worker registered'))
           .catch(err => console.log('Service Worker failed', err));
       });
     }
 
+    // Midnight rollover logic
     function scheduleMidnightUpdate() {
       const now = new Date();
       const next = new Date(now);
