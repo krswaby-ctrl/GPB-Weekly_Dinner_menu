@@ -84,7 +84,7 @@
       // ALIGNMENT FIX: 
       // Changed from '2' to '3' to correctly show Week 3 on Jan 19.
       // This ensures next Monday (Jan 26) will display Week 4.
-      const alignOffset = (3 - baseWeekIndex + 5) % 5;
+      const alignOffset = (4 - baseWeekIndex + 5) % 5;
       const alignedWeekIndex = ((baseWeekIndex - 1 + alignOffset) % 5) + 1;
 
       const imgEl = document.getElementById("menuImage");
