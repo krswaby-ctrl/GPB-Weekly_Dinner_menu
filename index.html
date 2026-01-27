@@ -78,23 +78,19 @@
       const now = new Date();
       const isoWeek = getISOWeekNumber(now);
       
-      // Calculate 1-5 index based on current ISO week
-      const baseWeekIndex = ((isoWeek - 1) % 5) + 1;
-
-      // ALIGNMENT FIX: 
-      // Changed from '3' to '4' to correctly show Week 4 on Jan 26.
-      // This ensures next Monday (Feb 2) will display Week 5.
-      const alignOffset = (4 - baseWeekIndex + 5) % 5;
-      const alignedWeekIndex = ((baseWeekIndex - 1 + alignOffset) % 5) + 1;
+      // PERMANENT AUTO-PILOT LOGIC:
+      // ISO Week 5 (Jan 26) + 4 = 9. 9 % 5 = 4. (Week 4)
+      // ISO Week 6 (Feb 02) + 4 = 10. 10 % 5 = 0 -> becomes Week 5.
+      const menuWeek = ((isoWeek + 4) % 5) || 5;
 
       const imgEl = document.getElementById("menuImage");
-      imgEl.src = imageForWeek[alignedWeekIndex];
+      imgEl.src = imageForWeek[menuWeek];
 
       const badge = document.getElementById("badge");
       if (badge) {
         const weekdays = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-        badge.textContent = `Showing Week ${alignedWeekIndex} • ${weekdays[now.getDay()]}, ${now.toDateString()}`;
-      }
+        badge.textContent = `Showing Week ${menuWeek} • ${weekdays[now.getDay()]}, ${now.toDateString()}`;
+
     }
 
     // Set initial image
