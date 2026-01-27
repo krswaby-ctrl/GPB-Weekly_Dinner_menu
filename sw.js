@@ -1,4 +1,4 @@
-const CACHE_NAME = 'gpb-menu-v11'; // Changed version to force update
+const CACHE_NAME = 'gpb-menu-v12'; // Changed version to force update
 const ASSETS = [
   './',
   './index.html',
