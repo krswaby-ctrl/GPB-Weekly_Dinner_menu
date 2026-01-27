@@ -74,13 +74,13 @@
       5: "GPB Week 5 Dinner Menu 9.25.png",
     };
 
-    function setMenuImageForToday() {
+       function setMenuImageForToday() {
       const now = new Date();
       const isoWeek = getISOWeekNumber(now);
       
       // PERMANENT AUTO-PILOT LOGIC:
-      // ISO Week 5 (Jan 26) + 4 = 9. 9 % 5 = 4. (Week 4)
-      // ISO Week 6 (Feb 02) + 4 = 10. 10 % 5 = 0 -> becomes Week 5.
+      // Jan 26 (ISO 5) + 4 = 9. 9 % 5 = 4. (Week 4)
+      // Feb 02 (ISO 6) + 4 = 10. 10 % 5 = 0 -> becomes Week 5.
       const menuWeek = ((isoWeek + 4) % 5) || 5;
 
       const imgEl = document.getElementById("menuImage");
@@ -89,10 +89,10 @@
       const badge = document.getElementById("badge");
       if (badge) {
         const weekdays = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+        // Ensure you use backticks (`) here for the variables to display
         badge.textContent = `Showing Week ${menuWeek} • ${weekdays[now.getDay()]}, ${now.toDateString()}`;
-
       }
-    }
+    } 
 
     // Set initial image
     setMenuImageForToday();
